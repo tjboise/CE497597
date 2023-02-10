@@ -1,9 +1,39 @@
+# YOLOv5 🚀 by Ultralytics, GPL-3.0 license
+"""
+Run YOLOv5 detection inference on images, videos, directories, globs, YouTube, webcam, streams, etc.
+
+Usage - sources:
+    $ python detect.py --weights yolov5s.pt --source 0                               # webcam
+                                                     img.jpg                         # image
+                                                     vid.mp4                         # video
+                                                     screen                          # screenshot
+                                                     path/                           # directory
+                                                     list.txt                        # list of images
+                                                     list.streams                    # list of streams
+                                                     'path/*.jpg'                    # glob
+                                                     'https://youtu.be/Zgi9g1ksQHc'  # YouTube
+                                                     'rtsp://example.com/media.mp4'  # RTSP, RTMP, HTTP stream
+
+Usage - formats:
+    $ python detect.py --weights yolov5s.pt                 # PyTorch
+                                 yolov5s.torchscript        # TorchScript
+                                 yolov5s.onnx               # ONNX Runtime or OpenCV DNN with --dnn
+                                 yolov5s_openvino_model     # OpenVINO
+                                 yolov5s.engine             # TensorRT
+                                 yolov5s.mlmodel            # CoreML (macOS-only)
+                                 yolov5s_saved_model        # TensorFlow SavedModel
+                                 yolov5s.pb                 # TensorFlow GraphDef
+                                 yolov5s.tflite             # TensorFlow Lite
+                                 yolov5s_edgetpu.tflite     # TensorFlow Edge TPU
+                                 yolov5s_paddle_model       # PaddlePaddle
+"""
+
 import argparse
-import os, json
+import os
 import platform
 import sys
 from pathlib import Path
-import pandas as pd 
+
 import torch
 
 FILE = Path(__file__).resolve()
@@ -19,27 +49,6 @@ from utils.general import (LOGGER, Profile, check_file, check_img_size, check_im
 from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import select_device, smart_inference_mode
 
-
-def gen_submit(df):
-  out_json = []
-  uuimg = df['image'].unique()
-  val_columns = ['cls','x1','y1','x2','y2']
-  for img in uuimg:
-    crow = {}
-    cur_df = df[df['image'] == img]
-    vals = list(cur_df[val_columns].values.tolist())
-    crow[img] = vals
-    out_json.append(crow)
-  with open('submission.json', 'w') as f:
-    json.dump(out_json, f)
-    
-def vis_box(x, img, path, color=None, clss=None, label=None, line_thickness=None, dframe=None):
-    img_name = os.path.basename(path)
-    score = clss.cpu().numpy()
-    x1,y1,x2,y2 = int(x[0]), int(x[1]), int(x[2]), int(x[3])
-    dframe.append([img_name, label, score, x1,y1,x2,y2])
-    return dframe
-    
 
 @smart_inference_mode()
 def run(
@@ -105,7 +114,6 @@ def run(
     # Run inference
     model.warmup(imgsz=(1 if pt or model.triton else bs, 3, *imgsz))  # warmup
     seen, windows, dt = 0, [], (Profile(), Profile(), Profile())
-    data_list = []
     for path, im, im0s, vid_cap, s in dataset:
         with dt[0]:
             im = torch.from_numpy(im).to(model.device)
@@ -153,8 +161,6 @@ def run(
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
-                    c = int(cls)
-                    data_list = vis_box(xyxy, imc, path, label=c, clss=conf, color=(0,0,255), line_thickness=3, dframe = data_list)
                     if save_txt:  # Write to file
                         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                         line = (cls, *xywh, conf) if save_conf else (cls, *xywh)  # label format
@@ -167,9 +173,7 @@ def run(
                         annotator.box_label(xyxy, label, color=colors(c, True))
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
-            
-            df = pd.DataFrame(data_list,columns=['image','cls','score','x1','y1','x2','y2'])
-            # print (df.head())
+
             # Stream results
             im0 = annotator.result()
             if view_img:
@@ -198,10 +202,7 @@ def run(
                         save_path = str(Path(save_path).with_suffix('.mp4'))  # force *.mp4 suffix on results videos
                         vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                     vid_writer[i].write(im0)
-        
-        ## save to submission
-        df['cls'] = df['cls'].astype(int) + 1
-        gen_submit(df)
+
         # Print time (inference-only)
         LOGGER.info(f"{s}{'' if len(det) else '(no detections), '}{dt[1].dt * 1E3:.1f}ms")
 
