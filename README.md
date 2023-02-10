@@ -9,11 +9,17 @@ Steps to train the YoloV5 model for detecting the defects on the pavement:
 ![image](https://user-images.githubusercontent.com/95270677/218219341-93df5426-baaa-454d-a21b-398d78e74790.png)
 
 
+2. download data
 
-2. Upload the whole folder onto your google Drive.
+- train and validation data-> link: 
+
+- test data ->  link:
+
+put the downloaded data into the folder in step 1.
+
+
+3. upload the data folders to your Google Drive.
 
 
 
-
-
-3. open the **train.ipynb**
+4. Open and run the **train.ipynb**, there are specific tutorials in the **train.ipynb** to lead you go through the training and testing procedure.
