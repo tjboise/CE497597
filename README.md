@@ -1,4 +1,4 @@
-# CE497597
+# CE497/597
 
 We will train and test a deep learning model, YoLoV5, in this tutorial. A GPU would train the deep learning model faster than CPU but a GPU is quite expensive. Luckily, the google provide a free GPU in colab. Thus, We will use the **Google Colab** to train the model.
 
