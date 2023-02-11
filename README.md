@@ -2,7 +2,7 @@
 
 We will train and test a deep learning model, YoLoV5, in this tutorial. A GPU would train the deep learning model faster than CPU but a GPU is quite expensive. Luckily, the google provide a free GPU in colab. Thus, We will use the **Google Colab** to train the model.
 
-Here, we will use the YoloV5 to detect the seven defects including: Alligator, Block, Transverse, Patching, Sealing, Longitudinal, and Manhole.
+Here, we will use the YoloV5 to detect the seven defects including: **Alligator, Block, Transverse, Patching, Sealing, Longitudinal, and Manhole**.
 
 Steps to train the YoloV5 model for detecting the defects on the pavement:
 
