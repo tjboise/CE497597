@@ -23,3 +23,5 @@ put the downloaded data into the folder in step 1.
 
 
 4. Open and run the **tutorial.ipynb** using the colab (just double click the file on google drive or right clivk the file and open with colab), there are specific tutorials in the **tutorial.ipynb** to lead you go through the training and testing procedure.
+
+PS: if you get any questions during running this repository, feel free to leave a note in the **issues** (you can see it in the menu bar).
