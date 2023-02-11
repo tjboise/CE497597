@@ -6,6 +6,7 @@ We will train and test a deep learning model, YoLoV5, in this tutorial. A GPU wo
 Steps to train the YoloV5 model for detecting the defects on the pavement:
 
 1. Download this repo into your own computer.
+![image](https://user-images.githubusercontent.com/95270677/218224154-b6b32c9d-ddd4-4038-9da2-563786d6322f.png)
 
 2. download data
 
