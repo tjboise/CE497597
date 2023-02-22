@@ -20,6 +20,8 @@ put the downloaded data into the folder in step 1.
 
 3. upload the data folders to your Google Drive.
 
+Make sure your folder is put in this directory.
+
 ![image](https://user-images.githubusercontent.com/95270677/218227398-4c47f241-1f8f-40e5-ad5c-c8e12a8092eb.png)
 
 
